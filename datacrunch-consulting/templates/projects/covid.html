@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+
+<style media="screen">
+  /* Add space between Vega-Embed links  */
+  .vega-actions a {
+    margin-right: 5px;
+  }
+</style>
+
+<h1>Ontario COVID-19 Confirmed Positive</h1>
+
+<p>Data {{ msg }} extracted directly from <a href="https://data.ontario.ca/dataset/status-of-covid-19-cases-in-ontario">Status of COVID-19 cases in Ontario</a>, transformed with pandas, and loaded with Flask using Vega-Lite.</p>
+
+<!-- Container for the visualization -->
+<div id="vis"></div>
+
+<script>
+  // Assign the specification to a local variable vlSpec.
+  var vlSpec = {
+    "width": 960,
+    "autosize": {
+        "type": "fit"
+        },
+    "description": "Ontario COVID-19 Confirmed Positive",
+    "data": {
+  "values": {{ covidtesting | safe }}
+},
+    "mark": "line",
+    "encoding": {
+        "x": {"field": "Reported Date", "timeUnit": "yearmonthdate"},
+        "y": {"field": "Confirmed Positive", "type": "quantitative"},
+    }
+  };
+
+  // Embed the visualization in the container with id `vis`
+  vegaEmbed("#vis", vlSpec);
+</script>
+{% endblock %}
