@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-from pywebio.platform.flask import webio_view
 
 # Flask Web Application
 flaskapp = Flask(__name__, static_url_path="/")
@@ -20,18 +19,6 @@ def projects():
 # Add Applications Here
 from projects.covid import covid
 flaskapp.register_blueprint(covid)
-
-# from projects.snowflake import snowflakeApp
-# flaskapp.register_blueprint(snowflakeApp)
-
-# PyWebIO Integrated Application 1
-
-# from projects.mongodb import *
-# flaskapp.add_url_rule("/projects/pywebio/", "mongodbApp", webio_view(mongodbApp), methods=["GET", "POST"])
-
-# PyWebIO Integrated Application 2
-from projects.tempConvert import *
-flaskapp.add_url_rule("/projects/tempconvert/", "tempConvert", webio_view(tempConvert), methods=["GET", "POST"])
 
 # Run Flask Web Application
 if __name__ == "__main__":
