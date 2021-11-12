@@ -8,6 +8,10 @@ flaskapp = Flask(__name__, static_url_path="/")
 def index():
     return render_template("index.html", title="Flask Web Application")
 
+@flaskapp.route("/ping/")
+def ping():
+    return render_template("ping.html", title="Flask Web Application")
+
 @flaskapp.route("/about/")
 def about():
     return render_template("about.html", title="Datacrunch - About")
