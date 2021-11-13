@@ -1,13 +1,11 @@
 from flask import Blueprint, render_template
 
 # Flask Blueprint Application
-covid = Blueprint("covid", "covid19")
+covid = Blueprint("covid", "covid")
 
-@covid.route("/projects/covid/")
+@covid.route("/projects/covid")
 def main():
     import urllib.request
-    import csv
-    from datetime import datetime
     import pandas as pd
 
     filename = "https://data.ontario.ca/dataset/f4f86e54-872d-43f8-8a86-3892fd3cb5e6/resource/ed270bb8-340b-41f9-a7c6-e8ef587e6d11/download/covidtesting.csv"

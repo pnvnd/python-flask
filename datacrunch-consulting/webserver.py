@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 
 # Flask Web Application
 flaskapp = Flask(__name__, static_url_path="/")
@@ -8,15 +8,15 @@ flaskapp = Flask(__name__, static_url_path="/")
 def index():
     return render_template("index.html", title="Flask Web Application")
 
-@flaskapp.route("/ping/")
+@flaskapp.route("/ping")
 def ping():
     return render_template("ping.html", title="Flask Web Application")
 
-@flaskapp.route("/about/")
+@flaskapp.route("/about")
 def about():
     return render_template("about.html", title="Datacrunch - About")
 
-@flaskapp.route("/projects/")
+@flaskapp.route("/projects")
 def projects():
     return render_template("projects.html", title="Datacrunch - Projects")
 
@@ -30,35 +30,13 @@ def convertC(tempF):
 def convertF(tempC):
     return f"{tempC}°C is {9/5*(float(tempC))+32:.2f}°F."
 
+### Add Applications Here ###
+
 # API to calculate the nth prime number and how long it takes
-@flaskapp.route("/projects/prime/<int:n>")
-def getPrime(n):
-    import time
-    
-    start = time.time()
-    count = 0
-    a = 2
+from projects.prime import prime
+flaskapp.register_blueprint(prime)
 
-    while (count < n):
-        b = 2
-        prime = 1 # Check if prime number is found
-        
-        while (b * b <= a):
-            if (a % b == 0):
-                prime = 0
-                break
-            b += 1
-            
-        if (prime > 0):
-            count += 1
-            
-        a += 1
-
-    end = time.time()
-
-    return f"{a-1} is prime number #{n}. Calculated in {end-start} seconds."
-
-# Add Applications Here
+# Get COVID data and plot on chart
 from projects.covid import covid
 flaskapp.register_blueprint(covid)
 
