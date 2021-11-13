@@ -3,7 +3,7 @@ from flask import Blueprint, render_template
 # Flask Blueprint Application
 covid = Blueprint("covid", "covid")
 
-@covid.route("/projects/covid")
+@covid.route("/projects/covid", strict_slashes=False)
 def main():
     import urllib.request
     import pandas as pd

@@ -8,7 +8,7 @@ flaskapp = Flask(__name__, static_url_path="/")
 def index():
     return render_template("index.html", title="Flask Web Application")
 
-@flaskapp.route("/ping")
+@flaskapp.route("/ping", strict_slashes=False)
 def ping():
     return render_template("ping.html", title="Flask Web Application")
 

@@ -3,7 +3,7 @@ from flask import Blueprint
 # Flask Blueprint Application
 prime = Blueprint("prime", "prime")
 
-@prime.route("/projects/prime/<int:n>")
+@prime.route("/projects/prime/<int:n>", strict_slashes=False)
 
 def getPrime(n):
     import time
