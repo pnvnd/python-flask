@@ -8,7 +8,7 @@ flaskapp = Flask(__name__, static_url_path="/")
 def index():
     return render_template("index.html", title="Flask Web Application")
 
-@flaskapp.route("/ping", strict_slashes=False)
+@flaskapp.route("/ping/", strict_slashes=False)
 def ping():
     return jsonify(ping="pong")
 
