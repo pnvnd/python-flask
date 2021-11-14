@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 
 # Flask Web Application
 flaskapp = Flask(__name__, static_url_path="/")
@@ -10,7 +10,7 @@ def index():
 
 @flaskapp.route("/ping", strict_slashes=False)
 def ping():
-    return render_template("ping.html", title="Flask Web Application")
+    return jsonify(ping="pong")
 
 @flaskapp.route("/about")
 def about():
@@ -35,6 +35,10 @@ def convertF(tempC):
 # API to calculate the nth prime number and how long it takes
 from projects.prime import prime
 flaskapp.register_blueprint(prime)
+
+# API to calculate the nth fibonacci number
+from projects.fibonacci import fibonacci
+flaskapp.register_blueprint(fibonacci)
 
 # Get COVID data and plot on chart
 from projects.covid import covid
