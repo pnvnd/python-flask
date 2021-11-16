@@ -1,6 +1,7 @@
 venv/
 newrelic.ini
 .vscode
+test
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
