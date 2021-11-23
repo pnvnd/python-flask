@@ -1,6 +1,7 @@
 venv/
 newrelic.ini
 .vscode
+.vs
 test
 
 # Byte-compiled / optimized / DLL files

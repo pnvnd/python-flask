@@ -1,4 +1,13 @@
+
+import logging
 from flask import Flask, render_template, jsonify
+
+logger = logging.getLogger("Basic Logger")
+logger.setLevel(logging.INFO)
+
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.INFO)
+logger.addHandler(stream_handler)
 
 # Flask Web Application
 flaskapp = Flask(__name__, static_url_path="/")
@@ -21,14 +30,18 @@ def projects():
     return render_template("projects.html", title="Datacrunch - Projects")
 
 # API to convert Fahrenheit to Celcius
-@flaskapp.route("/projects/convertC/<float:tempF>")
+@flaskapp.route("/projects/convertC/<tempF>")
 def convertC(tempF):
-    return f"{tempF}°F is {(5/9*(float(tempF))-32):.2f}°C."
+    tempC = (5/9*(float(tempF))-32)
+    logger.info(f"[INFO] Converted {tempF}°F to {tempC:.2f}°C.")
+    return f"{tempF}°F is {tempC:.2f}°C."
 
 # API to convert Celcius to Fahrenheit
-@flaskapp.route("/projects/convertF/<float:tempC>")
+@flaskapp.route("/projects/convertF/<tempC>")
 def convertF(tempC):
-    return f"{tempC}°C is {9/5*(float(tempC))+32:.2f}°F."
+    tempF = 9/5*(float(tempC))+32
+    logger.info(f"[INFO] Converted {tempC}°C to {tempF:.2f}°F")
+    return f"{tempC}°C is {tempF:.2f}°F."
 
 ### Add Applications Here ###
 
