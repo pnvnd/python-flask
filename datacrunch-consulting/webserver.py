@@ -1,4 +1,8 @@
+# .\venv\Scripts\activate.ps1
+# python .\datacrunch-consulting\webserver.py
 
+# import newrelic.agent
+# newrelic.agent.initialize()
 import logging
 from flask import Flask, render_template, jsonify
 
