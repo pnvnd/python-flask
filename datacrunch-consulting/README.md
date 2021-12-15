@@ -27,3 +27,10 @@ export NEW_RELIC_APP_NAME="Local Python App"
 export NEW_RELIC_LICENSE_KEY="XXXXXXXXXXXXXXXXNRAL"
 python3 datacrunch-consulting/webserver.py
 ```
+
+## Generating Errors
+Try the following paths (assuming local):
+http://127.0.0.1:5000/projects/convertC/123
+
+Then try to this to get something in New Relic Errors Inbox:
+http://127.0.0.1:5000/projects/convertC/--123
