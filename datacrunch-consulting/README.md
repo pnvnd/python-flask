@@ -16,7 +16,7 @@ newrelic.agent.initialize()
 
 ## Windows (PowerShell)
 ```PowerShell
-$Env:NEW_RELIC_APP_NAME = "new value test"
+$Env:NEW_RELIC_APP_NAME = "Local Python App"
 $Env:NEW_RELIC_LICENSE_KEY = "XXXXXXXXXXXXXXXXNRAL"
 python datacrunch-consulting\webserver.py
 ```
