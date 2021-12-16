@@ -30,7 +30,7 @@ python3 datacrunch-consulting/webserver.py
 
 ## Generating Errors
 Try the following paths (assuming local):
-http://127.0.0.1:5000/projects/convertC/123
+http://127.0.0.1:5000/convertC/123
 
 Then try to this to get something in New Relic Errors Inbox:
-http://127.0.0.1:5000/projects/convertC/--123
+http://127.0.0.1:5000/convertC/--123
