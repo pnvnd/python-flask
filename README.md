@@ -21,7 +21,7 @@ $Env:NEW_RELIC_LICENSE_KEY = "XXXXXXXXXXXXXXXXNRAL"
 python datacrunch-consulting\webserver.py
 ```
 
-## Linux / macOS
+## Linux / macOS (bash)
 ```bash
 export NEW_RELIC_APP_NAME="Local Python App"
 export NEW_RELIC_LICENSE_KEY="XXXXXXXXXXXXXXXXNRAL"
