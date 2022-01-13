@@ -1,10 +1,14 @@
 # Flask Web Application Setup
 1. `pip install virtualenv`
-1. Activate virtual environment by running
+
+2. Create a Virtual environment folder (if one does not already exist)
+    - `python3 -m venv venv` (linux/macOS)
+
+3. Activate virtual environment by running
     - `.\venv\Scripts\Activate.ps1` (PowerShell)
     - `source venv/bin/activate` (Linux / macOS)
-1. `python -m pip install --upgrade pip`
-1. `pip install -r requirements.txt`
+4. `python -m pip install --upgrade pip`
+5. `pip install -r requirements.txt`
 
 
 # Running the Application
