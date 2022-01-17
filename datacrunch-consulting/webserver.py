@@ -69,6 +69,10 @@ flaskapp.register_blueprint(luhn)
 from projects.covid import covid
 flaskapp.register_blueprint(covid)
 
+# Test redis-py in App
+from projects.redispy import redispy
+flaskapp.register_blueprint(redispy)
+
 # Run Flask Web Application
 if __name__ == "__main__":
     flaskapp.run()
