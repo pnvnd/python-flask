@@ -51,6 +51,17 @@ def convertF(tempC):
     logger.info(f"[INFO] Converted {tempC}°C to {tempF:.2f}°F")
     return f"{tempC}°C is {tempF:.2f}°F."
 
+# Redis test
+@flaskapp.route("/projects/redis", strict_slashes=False)
+def redispy():
+    import os
+    import redis
+
+    r = redis.from_url(os.environ.get("REDIS_URL"))
+    r.set('foo', 'bar')
+    return r.get('foo')
+
+
 ### Add Applications Here ###
 
 # API to calculate the nth prime number and how long it takes
@@ -70,8 +81,8 @@ from projects.covid import covid
 flaskapp.register_blueprint(covid)
 
 # Test redis-py in App
-from projects.redispy import redispy
-flaskapp.register_blueprint(redispy)
+# from projects.redispy import redispy
+# flaskapp.register_blueprint(redispy)
 
 # Run Flask Web Application
 if __name__ == "__main__":
