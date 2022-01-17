@@ -43,4 +43,32 @@
   // Embed the visualization in the container with id `vis`
   vegaEmbed("#vis", vlSpec);
 </script>
+
+<p>
+  <h1>Ontario COVID-19 Deaths</h1>
+</p>
+<!-- Container for the visualization -->
+<div id="viz"></div>
+
+<script>
+  // Assign the specification to a local variable vlSpec.
+  var vlSpec = {
+    "width": 960,
+    "autosize": {
+        "type": "fit"
+        },
+    "description": "Ontario COVID-19 Confirmed Positive",
+    "data": {
+  "values": {{ covidtesting | safe }}
+},
+    "mark": "line",
+    "encoding": {
+        "x": {"field": "Reported Date", "timeUnit": "yearmonthdate"},
+        "y": {"field": "Deaths", "type": "quantitative"},
+    }
+  };
+
+  // Embed the visualization in the container with id `viz`
+  vegaEmbed("#viz", vlSpec);
+</script>
 {% endblock %}
