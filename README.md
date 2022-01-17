@@ -30,9 +30,13 @@ newrelic.agent.initialize()
 | `python datacrunch-consulting\webserver.py`    | `python3 datacrunch-consulting/webserver.py`   |
 
 
-## Generating Errors
-Try the following paths (assuming local):
-http://127.0.0.1:5000/projects/convertC/123
+# Endpoints to Test
 
-Then try to this to get something in New Relic Errors Inbox:
-http://127.0.0.1:5000/projects/convertC/--123
+| API                             | Endpoint                                             | Notes                 |
+|---------------------------------|------------------------------------------------------|-----------------------|
+| Convert Celcius to Fahrenheit   | http://localhost:5000/projects/convertC/123          |                       |
+| Convert Fahrenheit to Celcius   | http://localhost:5000/projects/convertF/--143        | Generate Server Error |
+| Calculate n-th Prime Number     | http://localhost:5000/projects/prime/12345           | Put load on CPU / RAM |
+| Calculate n-th Fibonacci number | http://localhost:5000/projects/fib/42                | JSON result           |
+| Validate with Luhn algorithm    | http://localhost:5000/projects/luhn/5454545454545454 | Masked in logs        |
+| Get COVID data for Ontario      | http://localhost:5000/projects/covid                 |                       |
