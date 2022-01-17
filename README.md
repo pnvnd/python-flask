@@ -9,11 +9,11 @@
 
 | Step | Windows (PowerShell)                  | Linux / MacOS (bash)                   |
 |------|---------------------------------------|----------------------------------------|
-| 1    | `pip install virtualenv`              |                                        |
+| 1    | `pip install virtualenv`                                                       |
 | 2    | `python -m venv venv`                 | `python3 -m venv venv`                 |
 | 3    | `.\venv\Scripts\Activate.ps1`         | `source venv/bin/activate`             |
 | 4    | `python -m pip install --upgrade pip` | `python3 -m pip install --upgrade pip` |
-| 5    | `pip install -r requirements.txt`     |                                        |
+| 5    | `pip install -r requirements.txt`                                              |
 
 
 # Running the Application
