@@ -57,6 +57,10 @@ flaskapp.register_blueprint(prime)
 from projects.fibonacci import fibonacci
 flaskapp.register_blueprint(fibonacci)
 
+# API to validate credit card numbers
+from projects.luhn import luhn
+flaskapp.register_blueprint(luhn)
+
 # Get COVID data and plot on chart
 from projects.covid import covid
 flaskapp.register_blueprint(covid)
