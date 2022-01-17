@@ -1,14 +1,11 @@
 # Flask Web Application Setup
-1. `pip install virtualenv`
-
-2. Create a Virtual environment folder (if one does not already exist)
-    - `python3 -m venv venv` (linux/macOS)
-
-3. Activate virtual environment by running
-    - `.\venv\Scripts\Activate.ps1` (PowerShell)
-    - `source venv/bin/activate` (Linux / macOS)
-4. `python -m pip install --upgrade pip`
-5. `pip install -r requirements.txt`
+| Windows (PowerShell)                  | Linux / MacOS (bash)                   | Notes                                  |
+|---------------------------------------|----------------------------------------|----------------------------------------|
+| `pip install virtualenv`              |                                        | Install `virtualenv`                   |
+| `python -m venv venv`                 | `python3 -m venv venv`                 | Create virtual environment (if needed) |
+| `.\venv\Scripts\Activate.ps1`         | `source venv/bin/activate`             | Activate virtual environment           |
+| `python -m pip install --upgrade pip` | `python3 -m pip install --upgrade pip` | Upgrade `pip` in virtual environment   |
+| `pip install -r requirements.txt`     |                                        | Install dependencies                   |
 
 
 # Running the Application
@@ -18,19 +15,12 @@ import newrelic.agent
 newrelic.agent.initialize()
 ```
 
-## Windows (PowerShell)
-```PowerShell
-$Env:NEW_RELIC_APP_NAME = "Local Python App"
-$Env:NEW_RELIC_LICENSE_KEY = "XXXXXXXXXXXXXXXXNRAL"
-python datacrunch-consulting\webserver.py
-```
+| Windows (PowerShell)                                  | Linux / MacOS (bash)                                  |
+|-------------------------------------------------------|-------------------------------------------------------|
+| `$Env:NEW_RELIC_APP_NAME = "Local Python App"`        | `export NEW_RELIC_APP_NAME="Local Python App"`        |
+| `$Env:NEW_RELIC_LICENSE_KEY = "XXXXXXXXXXXXXXXXNRAL"` | `export NEW_RELIC_LICENSE_KEY="XXXXXXXXXXXXXXXXNRAL"` |
+| `python datacrunch-consulting\webserver.py`           | `python3 datacrunch-consulting/webserver.py`          |
 
-## Linux / macOS (bash)
-```bash
-export NEW_RELIC_APP_NAME="Local Python App"
-export NEW_RELIC_LICENSE_KEY="XXXXXXXXXXXXXXXXNRAL"
-python3 datacrunch-consulting/webserver.py
-```
 
 ## Generating Errors
 Try the following paths (assuming local):
