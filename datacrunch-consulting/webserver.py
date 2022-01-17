@@ -33,6 +33,10 @@ def about():
 def projects():
     return render_template("projects.html", title="Datacrunch - Projects")
 
+@flaskapp.route("/projects/statuspage", strict_slashes=False)
+def statuspage():
+    return render_template("projects/statuspage.html", title="Simple Statuspage")
+
 # API to convert Fahrenheit to Celcius
 @flaskapp.route("/projects/convertC/<tempF>")
 def convertC(tempF):

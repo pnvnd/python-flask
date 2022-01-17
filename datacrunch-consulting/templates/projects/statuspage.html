@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <h1>Statuspage Example Component Groups</h1>
+        
+    <script src="https://www.datacrunch.ca/simple-statuspage/js/statuspage.js"></script>
+    <section id="content"></section>
+    </div>
+    
+    <footer>
+    <hr />
+    
+      <i class="fas fa-check-circle" style="color: #2FCC66"> operational</i> |
+      <i class="fas fa-minus-circle" style="color: #F1C40F"> degraded performance</i> |
+      <i class="fas fa-exclamation-circle" style="color: #E67E22"> partial outage</i> |
+      <i class="fas fa-times-circle" style="color: #E74C3C"> major outage</i> |
+      <i class="fas fa-cog" style="color: #3498DB"> under maintenance</i>
+    
+    </footer>
+    
+    <script src="https://4v6r9bp6f4d6.statuspage.io/embed/script.js"></script>
+{% endblock %}
