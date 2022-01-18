@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+<h1>Divisibility Checker</h1>
+<p>Please enter an integer to check for divisibility and to check factors.</p>
+
+    <form method="post" action="{{ url_for('divisibility.divisibility_result') }}" id="divisibility_form">
+        <label for="Input1"></label>
+        <input type="text" name="Input1" id="Input1">
+        <br />
+        <input type="reset" value="RESET" />
+        <input type="submit" value="Submit" />
+    </form>
+
+    {% if factors|length %}
+    <br/>
+    <p>{{input1}} is divisible by {{factors}}</p>
+    {% endif %}
+
+    {% if factors == [] %}
+    <br/>
+    <p>{{input1}} has no factors</p>
+    {% endif %}
+
+{% endblock %}

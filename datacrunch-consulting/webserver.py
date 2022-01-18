@@ -73,6 +73,10 @@ flaskapp.register_blueprint(covid)
 from projects.redispy import redispy
 flaskapp.register_blueprint(redispy)
 
+# Input number to check divisibility
+from projects.divisibility import divisibility
+flaskapp.register_blueprint(divisibility)
+
 # Run Flask Web Application
 if __name__ == "__main__":
     flaskapp.run()
