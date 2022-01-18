@@ -1,13 +1,14 @@
 from flask import Blueprint, render_template
-import os
-import redis
-# from urllib.parse import urlparse
 
 # Flask Blueprint Application
 redispy = Blueprint("redispy", "redispy")
 
 @redispy.route("/projects/redis", strict_slashes=False)
 def index():
+    import os
+    import redis
+    # from urllib.parse import urlparse
+    
     ## Heroku
     r = redis.from_url(os.environ.get("REDIS_URL"))
 

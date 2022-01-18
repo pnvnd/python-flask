@@ -4,9 +4,9 @@ import logging
 logger = logging.getLogger("Basic Logger")
 logger.setLevel(logging.INFO)
 
-stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.INFO)
-logger.addHandler(stream_handler)
+#stream_handler = logging.StreamHandler()
+#stream_handler.setLevel(logging.INFO)
+#logger.addHandler(stream_handler)
 
 # Flask Blueprint Application
 luhn = Blueprint("luhn", "luhn")
@@ -25,9 +25,7 @@ def checkLuhn(cardNo):
         if (isSecond == True):
             d = d * 2
   
-        # We add two digits to handle
-        # cases that make two digits after
-        # doubling
+        # We add two digits to handle cases that make two digits after doubling
         nSum += d // 10
         nSum += d % 10
   
