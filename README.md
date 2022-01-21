@@ -34,11 +34,12 @@ newrelic.agent.initialize()
 
 | API                             | Endpoint                                             | Notes                 |
 |---------------------------------|------------------------------------------------------|-----------------------|
-| Ping                            | http://localhost:5000/ping                           | JSON: pong            |
-| Convert Celcius to Fahrenheit   | http://localhost:5000/projects/convertC/123          |                       |
-| Convert Fahrenheit to Celcius   | http://localhost:5000/projects/convertF/--143        | Generate Server Error |
-| Calculate n-th Prime Number     | http://localhost:5000/projects/prime/12345           | Put load on CPU / RAM |
-| Calculate n-th Fibonacci number | http://localhost:5000/projects/fib/42                | JSON result           |
-| Validate with Luhn algorithm    | http://localhost:5000/projects/luhn/5454545454545454 | Masked in logs        |
-| Get COVID data for Ontario      | http://localhost:5000/projects/covid                 |                       |
-| Get status for services         | http://localhost:5000/projects/statuspage            | AJAX request          |   
+| Ping                            | http://127.0.0.1:5000/ping                           | JSON: pong            |
+| Convert Celcius to Fahrenheit   | http://127.0.0.1:5000/projects/convertC/123          |                       |
+| Convert Fahrenheit to Celcius   | http://127.0.0.1:5000/projects/convertF/--143        | Generate Server Error |
+| Calculate n-th Prime Number     | http://127.0.0.1:5000/projects/prime/12345           | Put load on CPU / RAM |
+| Calculate n-th Fibonacci number | http://127.0.0.1:5000/projects/fib/42                | JSON result           |
+| Validate with Luhn algorithm    | http://127.0.0.1:5000/projects/luhn/5454545454545454 | Masked in logs        |
+| Get COVID data for Ontario      | http://127.0.0.1:5000/projects/covid                 |                       |
+| Get status for services         | http://127.0.0.1:5000/projects/statuspage            | AJAX request          |
+| Get something from Redis DB     | http://127.0.0.1:5000/projects/redis                 | Redis database        |
