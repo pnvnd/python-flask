@@ -26,5 +26,5 @@ def main():
     layout = go.Layout(title="Ontario COVID Data")
 
     fig = go.Figure(data=data, layout=layout)
-    pyo.plot(fig, filename="datacrunch-consulting/templates/projects/covid2.html")
-    return render_template("projects/covid2.html", title="Ontario COVID-19", auto_open=False)
+    pyo.plot(fig, filename="datacrunch-consulting/templates/projects/covid2.html", auto_open=False)
+    return render_template("projects/covid2.html", title="Ontario COVID-19")
