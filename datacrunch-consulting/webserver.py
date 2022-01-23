@@ -69,6 +69,10 @@ flaskapp.register_blueprint(luhn)
 from projects.covid import covid
 flaskapp.register_blueprint(covid)
 
+# Get COVID data and plot on chart with Plotly
+from projects.covid2 import covid2
+flaskapp.register_blueprint(covid2)
+
 # Test redis-py in App
 from projects.redispy import redispy
 flaskapp.register_blueprint(redispy)
