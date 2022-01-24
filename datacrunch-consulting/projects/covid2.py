@@ -1,7 +1,5 @@
 from flask import Blueprint, render_template
 
-
-
 # Flask Blueprint Application
 covid2 = Blueprint("covid2", "covid2")
 
