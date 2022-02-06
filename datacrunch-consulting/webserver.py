@@ -81,6 +81,10 @@ flaskapp.register_blueprint(redispy)
 from projects.divisibility import divisibility
 flaskapp.register_blueprint(divisibility)
 
+# Import Plotly Dash application into Flask
+from projects.dashboard import init_dashboard
+app = init_dashboard(flaskapp)
+
 # Run Flask Web Application
 if __name__ == "__main__":
     flaskapp.run()
