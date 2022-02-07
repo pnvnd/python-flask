@@ -14,6 +14,7 @@ stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.INFO)
 logger.addHandler(stream_handler)
 
+import requests
 # Flask Web Application
 flaskapp = Flask(__name__, static_url_path="/")
 
@@ -21,6 +22,12 @@ flaskapp = Flask(__name__, static_url_path="/")
 @flaskapp.route("/")
 def index():
     return render_template("index.html", title="Flask Web Application")
+
+@flaskapp.route("/external/error")
+def external_error():
+    req = requests.get("http://localhost:8000/error")
+    req.raise_for_status()
+    return req.text
 
 @flaskapp.route("/ping/", strict_slashes=False)
 def ping():
