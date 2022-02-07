@@ -23,11 +23,9 @@ flaskapp = Flask(__name__, static_url_path="/")
 def index():
     return render_template("index.html", title="Flask Web Application")
 
-@flaskapp.route("/external/error")
-def external_error():
-    req = requests.get("http://localhost:8000/error")
-    req.raise_for_status()
-    return req.text
+@flaskapp.route("/external/source")
+def external_source():
+    return "Hello, fellow humans!\n"
 
 @flaskapp.route("/ping/", strict_slashes=False)
 def ping():
