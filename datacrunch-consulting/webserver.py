@@ -91,6 +91,10 @@ flaskapp.register_blueprint(divisibility)
 from projects.dashboard import init_dashboard
 app = init_dashboard(flaskapp)
 
+# Import Plotly barchart into Flask
+from projects.barchart import init_barchart
+app = init_barchart(flaskapp)
+
 # Run Flask Web Application
 if __name__ == "__main__":
     flaskapp.run()
