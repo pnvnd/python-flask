@@ -95,6 +95,6 @@ app = init_dashboard(flaskapp)
 # from projects.barchart import init_barchart
 # app = init_barchart(flaskapp)
 
-# Run Flask Web Application
+# Run Flask Web Application, new comment
 if __name__ == "__main__":
     flaskapp.run()
