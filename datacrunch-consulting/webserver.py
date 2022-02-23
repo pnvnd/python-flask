@@ -4,6 +4,22 @@
 import newrelic.agent
 newrelic.agent.initialize()
 
+# OTEL - Imports
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+
+# OTEL - Pass in the service we're creating into the tracer provider
+trace.set_tracer_provider(
+    TracerProvider(resource=Resource.create({"service.name": "Local Python App (OTEL)"}))
+)
+
+# OTEL - Create a BatchSpanProcessor and add the exporter to it, add to the tracer
+trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+
 import logging
 from flask import Flask, render_template, jsonify
 
@@ -17,6 +33,9 @@ logger.addHandler(stream_handler)
 import requests
 # Flask Web Application
 flaskapp = Flask(__name__, static_url_path="/")
+
+# OTEL - Instrumentation
+FlaskInstrumentor().instrument_app(flaskapp)
 
 # Navigation
 @flaskapp.route("/")

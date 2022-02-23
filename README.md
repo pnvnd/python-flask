@@ -23,11 +23,13 @@ import newrelic.agent
 newrelic.agent.initialize()
 ```
 
-| Windows (PowerShell)                           | Linux / MacOS (bash)                           |
-|------------------------------------------------|------------------------------------------------|
-| `$Env:NEW_RELIC_APP_NAME = "Local Python App"` | `export NEW_RELIC_APP_NAME="Local Python App"` |
-| `$Env:NEW_RELIC_LICENSE_KEY = "XXXX...NRAL"`   | `export NEW_RELIC_LICENSE_KEY="XXXX...NRAL"`   |
-| `python datacrunch-consulting\webserver.py`    | `python3 datacrunch-consulting/webserver.py`   |
+| Windows (PowerShell)                                         | Linux / MacOS (bash)                                      |
+|--------------------------------------------------------------|-----------------------------------------------------------|
+| `$Env:NEW_RELIC_APP_NAME = "Local Python App"`               | `export NEW_RELIC_APP_NAME="Local Python App"`            |
+| `$Env:NEW_RELIC_LICENSE_KEY = "XXXX...NRAL"`                 | `export NEW_RELIC_LICENSE_KEY="XXXX...NRAL"`              |
+| `$Env:OTEL_EXPORTER_OTLP_ENDPOINT = "otlp.nr-data.net:4317"` | `export OTEL_EXPORTER_OTLP_ENDPOINT="Local Python App"`   |
+| `$Env:OTEL_EXPORTER_OTLP_HEADERS = "api-key=XXXX...NRAL"`    | `export OTEL_EXPORTER_OTLP_HEADERS="api-key=XXXX...NRAL"` |
+| `python datacrunch-consulting\webserver.py`                  | `python3 datacrunch-consulting/webserver.py`              |
 
 
 # Endpoints to Test
