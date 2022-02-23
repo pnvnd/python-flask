@@ -14,7 +14,7 @@ from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExport
 
 # OTEL - Pass in the service we're creating into the tracer provider
 trace.set_tracer_provider(
-    TracerProvider(resource=Resource.create({"service.name": "Local Python App (OTEL)"}))
+    TracerProvider(resource=Resource.create({"service.name": "Python App (OTEL)"}))
 )
 
 # OTEL - Create a BatchSpanProcessor and add the exporter to it, add to the tracer
