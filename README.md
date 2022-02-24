@@ -23,13 +23,11 @@ import newrelic.agent
 newrelic.agent.initialize()
 ```
 
-| Windows (PowerShell)                                         | Linux / MacOS (bash)                                      |
-|--------------------------------------------------------------|-----------------------------------------------------------|
-| `$Env:NEW_RELIC_APP_NAME = "Local Python App"`               | `export NEW_RELIC_APP_NAME="Local Python App"`            |
-| `$Env:NEW_RELIC_LICENSE_KEY = "XXXX...NRAL"`                 | `export NEW_RELIC_LICENSE_KEY="XXXX...NRAL"`              |
-| `$Env:OTEL_EXPORTER_OTLP_ENDPOINT = "otlp.nr-data.net:4317"` | `export OTEL_EXPORTER_OTLP_ENDPOINT="Local Python App"`   |
-| `$Env:OTEL_EXPORTER_OTLP_HEADERS = "api-key=XXXX...NRAL"`    | `export OTEL_EXPORTER_OTLP_HEADERS="api-key=XXXX...NRAL"` |
-| `python datacrunch-consulting\webserver.py`                  | `python3 datacrunch-consulting/webserver.py`              |
+| Windows (PowerShell)                           | Linux / MacOS (bash)                           |
+|------------------------------------------------|------------------------------------------------|
+| `$Env:NEW_RELIC_APP_NAME = "Local Python App"` | `export NEW_RELIC_APP_NAME="Local Python App"` |
+| `$Env:NEW_RELIC_LICENSE_KEY = "XXXX...NRAL"`   | `export NEW_RELIC_LICENSE_KEY="XXXX...NRAL"`   |
+| `python datacrunch-consulting\webserver.py`    | `python3 datacrunch-consulting/webserver.py`   |
 
 
 # Endpoints to Test
@@ -45,3 +43,25 @@ newrelic.agent.initialize()
 | Get COVID data for Ontario      | http://127.0.0.1:5000/projects/covid                 |                       |
 | Get status for services         | http://127.0.0.1:5000/projects/statuspage            | AJAX request          |
 | Get something from Redis DB     | http://127.0.0.1:5000/projects/redis                 | Redis database        |
+
+# OpenTelemetry
+1. To send telemetry data to New Relic, set the following environment variables
+```
+OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp.nr-data.net:4317
+OTEL_EXPORTER_OTLP_HEADERS=api-key=XXXX...NRAL
+OTEL_RESOURCE_ATTRIBUTES=service.name=python-flask.otel,service.instance.id=localhost-pc
+```
+
+2. Download the following packages to your virtual environment
+```
+pip install opentelemetry-api
+pip install opentelemetry-sdk
+pip install opentelemetry-instrumentation-flask
+pip install opentelemetry-exporter-otlp-proto-grpc
+pip install opentelemetry-distro
+```
+
+3. No changes to the code is needed, just run the app as usual but with `opentelemetry-instrument` at the front
+```
+opentelemetry-instrument python .\datacrunch-consulting\webserver.py
+```
