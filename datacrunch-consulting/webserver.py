@@ -4,15 +4,31 @@
 import newrelic.agent
 newrelic.agent.initialize()
 
+# Import the logging module and the New Relic log formatter
 import logging
+from newrelic.agent import NewRelicContextFormatter
+
 from flask import Flask, render_template, jsonify
 
-logger = logging.getLogger("Basic Logger")
-logger.setLevel(logging.INFO)
+# logger = logging.getLogger("Basic Logger")
+# logger.setLevel(logging.INFO)
 
-stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.INFO)
-logger.addHandler(stream_handler)
+# stream_handler = logging.StreamHandler()
+# stream_handler.setLevel(logging.INFO)
+# logger.addHandler(stream_handler)
+
+# Instantiate a new log handler, and set logging level
+handler = logging.StreamHandler()
+handler.setLevel(logging.INFO)
+
+# Instantiate the log formatter and add it to the log handler
+formatter = NewRelicContextFormatter()
+handler.setFormatter(formatter)
+
+# Get the root logger, set logging level, and add the handler to it
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.INFO)
+root_logger.addHandler(handler)
 
 import requests
 # Flask Web Application
@@ -47,14 +63,14 @@ def statuspage():
 @flaskapp.route("/projects/convertC/<tempF>")
 def convertC(tempF):
     tempC = (5/9*(float(tempF))-32)
-    logger.info(f"[INFO] Converted {tempF}°F to {tempC:.2f}°C.")
+    root_logger.info(f"[INFO] Converted {tempF}°F to {tempC:.2f}°C.")
     return f"{tempF}°F is {tempC:.2f}°C."
 
 # API to convert Celcius to Fahrenheit
 @flaskapp.route("/projects/convertF/<tempC>")
 def convertF(tempC):
     tempF = 9/5*(float(tempC))+32
-    logger.info(f"[INFO] Converted {tempC}°C to {tempF:.2f}°F")
+    root_logger.info(f"[INFO] Converted {tempC}°C to {tempF:.2f}°F")
     return f"{tempC}°C is {tempF:.2f}°F."
 
 ### Add Applications Here ###
