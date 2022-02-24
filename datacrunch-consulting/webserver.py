@@ -10,13 +10,6 @@ from newrelic.agent import NewRelicContextFormatter
 
 from flask import Flask, render_template, jsonify
 
-# logger = logging.getLogger("Basic Logger")
-# logger.setLevel(logging.INFO)
-
-# stream_handler = logging.StreamHandler()
-# stream_handler.setLevel(logging.INFO)
-# logger.addHandler(stream_handler)
-
 # Instantiate a new log handler, and set logging level
 handler = logging.StreamHandler()
 handler.setLevel(logging.INFO)
@@ -69,9 +62,12 @@ def convertC(tempF):
 # API to convert Celcius to Fahrenheit
 @flaskapp.route("/projects/convertF/<tempC>")
 def convertF(tempC):
-    tempF = 9/5*(float(tempC))+32
-    root_logger.info(f"[INFO] Converted {tempC}°C to {tempF:.2f}°F")
-    return f"{tempC}°C is {tempF:.2f}°F."
+    try:
+        tempF = 9/5*(float(tempC))+32
+        root_logger.info(f"[INFO] Converted {tempC}°F to {tempF:.2f}°C.")
+        return f"{tempC}°C is {tempF:.2f}°F."
+    except:
+        root_logger.warning("[WARN] Invalid temperature!")
 
 ### Add Applications Here ###
 
