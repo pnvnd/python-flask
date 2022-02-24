@@ -1,1 +1,1 @@
-web: opentelemetry-instrument newrelic-admin run-program gunicorn -b "0.0.0.0:$PORT" --chdir datacrunch-consulting webserver:flaskapp
+web: newrelic-admin run-program opentelemetry-instrument gunicorn -b "0.0.0.0:$PORT" --chdir datacrunch-consulting webserver:flaskapp
