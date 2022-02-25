@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify
 # Flask Blueprint Application
 fibonacci = Blueprint("fib", "fib")
 
-@fibonacci.route("/projects/fib/<int:x>", strict_slashes=False)
+@fibonacci.route("/api/fib/<int:x>", strict_slashes=False)
 
 def fib(x):
     array = [0, 1]

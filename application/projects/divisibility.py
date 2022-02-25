@@ -3,11 +3,11 @@ from flask import Blueprint, render_template, request
 # Flask Blueprint Application
 divisibility = Blueprint("divisibility", "divisibility")
 
-@divisibility.route("/projects/divisibility/", strict_slashes=False)
+@divisibility.route("/divisibility", strict_slashes=False)
 def index():
     return render_template("projects/divisibility.html", title="Divisibility Checker")
 
-@divisibility.route("/projects/divisibility_result", strict_slashes=False, methods=['POST'])
+@divisibility.route("/divisibility_result", strict_slashes=False, methods=['POST'])
 def divisibility_result():
 
     # request.form looks for:

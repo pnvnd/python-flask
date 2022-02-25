@@ -5,10 +5,11 @@
     {% block head %}
     <meta charset="UTF-8">
     <title>{% block title %}Flask Web Application{% endblock %}</title>
-    <link rel="stylesheet" href="https://www.datacrunch.ca/simple-statuspage/css/style.css" />
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
     <link rel="stylesheet" href="https://www.datacrunch.ca/simple-statuspage/fontawesome/css/all.css" />
-    <script src="https://www.datacrunch.ca/simple-statuspage/js/dark-mode.js"></script>
-    <script src="https://www.datacrunch.ca/simple-statuspage/js/clock.js"></script>
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/clock.js') }}"></script>
     {% endblock %}
 </head>
 

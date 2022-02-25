@@ -3,7 +3,7 @@ from flask import Blueprint, render_template
 # Flask Blueprint Application
 redispy = Blueprint("redispy", "redispy")
 
-@redispy.route("/projects/redis", strict_slashes=False)
+@redispy.route("/redis", strict_slashes=False)
 def index():
     import os
     import redis
