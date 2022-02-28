@@ -1,1 +1,1 @@
-web: newrelic-admin run-program opentelemetry-instrument gunicorn webserver:flaskapp
+web: gunicorn webserver:flaskapp
