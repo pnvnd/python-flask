@@ -37,7 +37,7 @@ flaskapp = Flask(__name__, static_url_path='/', static_folder='application/stati
 
 # OpenTelemetry Settings
 import uuid
-trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-flask.test7", "service.instance.id": str(uuid.uuid1()), "environment": "development"})))
+trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-flask.otel", "service.instance.id": str(uuid.uuid1()), "environment": "development"})))
 trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
 FlaskInstrumentor().instrument_app(flaskapp)
