@@ -65,3 +65,11 @@ pip install opentelemetry-distro
 ```
 opentelemetry-instrument python .\datacrunch-consulting\webserver.py
 ```
+
+# Docker Image
+1. Build the Docker image with `docker build -t python-flask:latest .`
+2. Run the app with your `INGEST - LICENSE` key and give your application a name:
+```
+docker run -d -e NEW_RELIC_LICENSE_KEY="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXNRAL" -e NEW_RELIC_APP_NAME="python-flask.docker" -p 5000:5000 python-flask:latest`
+```
+3. Access the application with the same endpoints above at `http://127.0.0.1:5000`
