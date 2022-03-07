@@ -1,5 +1,5 @@
-import newrelic.agent
-newrelic.agent.initialize()
+# import newrelic.agent
+# newrelic.agent.initialize()
 
 # OpenTelemetry
 from opentelemetry import trace
