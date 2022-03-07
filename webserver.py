@@ -1,51 +1,51 @@
-# import newrelic.agent
-# newrelic.agent.initialize()
+import newrelic.agent
+newrelic.agent.initialize()
 
 # OpenTelemetry
-# from opentelemetry import trace
-# from opentelemetry.sdk.trace import TracerProvider
-# from opentelemetry.sdk.trace.export import BatchSpanProcessor
-# from opentelemetry.sdk.resources import Resource
-# from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-# from opentelemetry.instrumentation.flask import FlaskInstrumentor
-# from opentelemetry.instrumentation.requests import RequestsInstrumentor
-# from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
-# from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
-# from opentelemetry.instrumentation.redis import RedisInstrumentor
-# from opentelemetry.instrumentation.logging import LoggingInstrumentor
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
+from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
+from opentelemetry.instrumentation.redis import RedisInstrumentor
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
-# # Import the logging module and the New Relic log formatter
-# import logging
-# from newrelic.agent import NewRelicContextFormatter
+# Import the logging module and the New Relic log formatter
+import logging
+from newrelic.agent import NewRelicContextFormatter
 
-# # Instantiate a new log handler, and set logging level
-# handler = logging.StreamHandler()
-# handler.setLevel(logging.INFO)
+# Instantiate a new log handler, and set logging level
+handler = logging.StreamHandler()
+handler.setLevel(logging.INFO)
 
-# # Instantiate the log formatter and add it to the log handler
-# formatter = NewRelicContextFormatter()
-# handler.setFormatter(formatter)
+# Instantiate the log formatter and add it to the log handler
+formatter = NewRelicContextFormatter()
+handler.setFormatter(formatter)
 
-# # Get the root logger, set logging level, and add the handler to it
-# root_logger = logging.getLogger()
-# root_logger.setLevel(logging.INFO)
-# root_logger.addHandler(handler)
+# Get the root logger, set logging level, and add the handler to it
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.INFO)
+root_logger.addHandler(handler)
 
 # Flask Web Application
 from flask import Flask, render_template, jsonify
 flaskapp = Flask(__name__, static_url_path='/', static_folder='application/static', template_folder='application/templates')
 
 # OpenTelemetry Settings
-# import uuid
-# trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-flask.otel", "service.instance.id": str(uuid.uuid1()), "environment": "development"})))
-# trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+import uuid
+trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-flask.otel", "service.instance.id": str(uuid.uuid1()), "environment": "development"})))
+trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
-# FlaskInstrumentor().instrument_app(flaskapp)
-# RequestsInstrumentor().instrument()
-# Jinja2Instrumentor().instrument()
-# URLLib3Instrumentor().instrument()
-# RedisInstrumentor().instrument()
-# LoggingInstrumentor().instrument()
+FlaskInstrumentor().instrument_app(flaskapp)
+RequestsInstrumentor().instrument()
+Jinja2Instrumentor().instrument()
+URLLib3Instrumentor().instrument()
+RedisInstrumentor().instrument()
+LoggingInstrumentor().instrument()
 
 # Navigation
 @flaskapp.route("/")
