@@ -68,7 +68,7 @@ def statuspage():
 @flaskapp.route("/convertC/<tempF>")
 def convertC(tempF):
     tempC = (5/9*(float(tempF))-32)
-    #root_logger.info(f"[INFO] Converted {tempF}°F to {tempC:.2f}°C.")
+    root_logger.info(f"[INFO] Converted {tempF}°F to {tempC:.2f}°C.")
     return f"{tempF}°F is {tempC:.2f}°C."
 
 # API to convert Celcius to Fahrenheit
@@ -76,11 +76,10 @@ def convertC(tempF):
 def convertF(tempC):
     try:
         tempF = 9/5*(float(tempC))+32
-        #root_logger.info(f"[INFO] Converted {tempC}°F to {tempF:.2f}°C.")
+        root_logger.info(f"[INFO] Converted {tempC}°F to {tempF:.2f}°C.")
         return f"{tempC}°C is {tempF:.2f}°F."
     except:
-        return "error"
-        #root_logger.warning("[WARN] Invalid temperature!")
+        root_logger.warning("[WARN] Invalid temperature!")
 
 ### Add Applications Here ###
 
