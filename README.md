@@ -42,7 +42,6 @@ newrelic.agent.initialize()
 | Validate with Luhn algorithm    | http://127.0.0.1:5000/api/luhn/951847623 | Masked in logs        |
 | Get COVID data for Ontario      | http://127.0.0.1:5000/covid              |                       |
 | Get status for services         | http://127.0.0.1:5000/statuspage         | AJAX request          |
-| Get something from Redis DB     | http://127.0.0.1:5000/redis              | Redis database        |
 
 # OpenTelemetry
 1. To send telemetry data to New Relic, set the following environment variables
