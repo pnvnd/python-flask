@@ -71,7 +71,7 @@ def convertC(tempF):
     root_logger.info(f"[INFO] Converted {tempF}°F to {tempC:.2f}°C.")
     return f"{tempF}°F is {tempC:.2f}°C."
 
-# API to convert Celcius to Fahrenheit
+# API to convert Celcius to Fahrenheit New Comment
 @flaskapp.route("/convertF/<tempC>")
 def convertF(tempC):
     try:
