@@ -81,7 +81,7 @@ def convertF(tempC):
     except:
         root_logger.warning("[WARN] Invalid temperature!")
 
-### Add Applications Here ###
+### Add Applications Here #######
 
 # API to calculate the nth prime number and how long it takes
 from application.projects.prime import prime
