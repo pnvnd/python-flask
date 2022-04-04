@@ -14,22 +14,28 @@ from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
 from opentelemetry.instrumentation.redis import RedisInstrumentor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
+from opentelemetry.sdk._logs import LogEmitterProvider
+from opentelemetry.sdk._logs import set_log_emitter_provider
+from opentelemetry.sdk._logs import OTLPHandler
+from opentelemetry.sdk._logs.export import BatchLogProcessor
+
 # Import the logging module and the New Relic log formatter
 import logging
-from newrelic.agent import NewRelicContextFormatter
+# from newrelic.agent import NewRelicContextFormatter
 
 # Instantiate a new log handler, and set logging level
-handler = logging.StreamHandler()
-handler.setLevel(logging.INFO)
+# handler = logging.StreamHandler()
+# handler.setLevel(logging.INFO)
 
 # Instantiate the log formatter and add it to the log handler
-formatter = NewRelicContextFormatter()
-handler.setFormatter(formatter)
+#formatter = NewRelicContextFormatter()
+#handler.setFormatter(formatter)
 
 # Get the root logger, set logging level, and add the handler to it
-root_logger = logging.getLogger()
-root_logger.setLevel(logging.INFO)
-root_logger.addHandler(handler)
+# root_logger = logging.getLogger()
+# root_logger.setLevel(logging.INFO)
+# root_logger.addHandler(handler)
 
 # Flask Web Application
 from flask import Flask, render_template, jsonify
@@ -37,8 +43,33 @@ flaskapp = Flask(__name__, static_url_path='/', static_folder='application/stati
 
 # OpenTelemetry Settings
 import uuid
-trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-flask.otel", "service.instance.id": str(uuid.uuid1()), "environment": "development"})))
+serviceId = str(uuid.uuid1())
+
+trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-flask.local", "service.instance.id": serviceId, "environment": "local"})))
 trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+
+log_emitter_provider = LogEmitterProvider(resource=Resource.create({"service.name": "python-flask.local", "service.instance.id": serviceId, "environment": "local"}))
+set_log_emitter_provider(log_emitter_provider)
+
+exporter = OTLPLogExporter(insecure=True)
+log_emitter_provider.add_log_processor(BatchLogProcessor(exporter))
+log_emitter = log_emitter_provider.get_log_emitter(__name__, "0.1")
+handler = OTLPHandler(level=logging.NOTSET, log_emitter=log_emitter)
+
+# Attach OTLP handler to root logger
+logging.getLogger().addHandler(handler)
+
+# Log directly
+logging.info("Jackdaws love my big sphinx of quartz.")
+
+# Create different namespaced loggers
+logger1 = logging.getLogger("myapp.area1")
+logger2 = logging.getLogger("myapp.area2")
+
+logger1.debug("Quick zephyrs blow, vexing daft Jim.")
+logger1.info("How quickly daft jumping zebras vex.")
+logger2.warning("Jail zesty vixen who grabbed pay from quack.")
+logger2.error("The five boxing wizards jump quickly.")
 
 FlaskInstrumentor().instrument_app(flaskapp)
 RequestsInstrumentor().instrument()
@@ -68,7 +99,7 @@ def statuspage():
 @flaskapp.route("/convertC/<tempF>")
 def convertC(tempF):
     tempC = (5/9*(float(tempF))-32)
-    root_logger.info(f"[INFO] Converted {tempF}°F to {tempC:.2f}°C.")
+    logging.info(f"[INFO] Converted {tempF}°F to {tempC:.2f}°C.")
     return f"{tempF}°F is {tempC:.2f}°C."
 
 # API to convert Celcius to Fahrenheit New Comment
@@ -76,10 +107,10 @@ def convertC(tempF):
 def convertF(tempC):
     try:
         tempF = 9/5*(float(tempC))+32
-        root_logger.info(f"[INFO] Converted {tempC}°F to {tempF:.2f}°C.")
+        logging.info(f"[INFO] Converted {tempC}°F to {tempF:.2f}°C.")
         return f"{tempC}°C is {tempF:.2f}°F."
     except:
-        root_logger.warning("[WARN] Invalid temperature!")
+        logging.warning("[WARN] Invalid temperature!")
 
 ### Add Applications Here #######
 
