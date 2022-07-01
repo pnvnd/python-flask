@@ -45,10 +45,10 @@ flaskapp = Flask(__name__, static_url_path='/', static_folder='application/stati
 import uuid
 serviceId = str(uuid.uuid1())
 
-trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-flask.heroku", "service.instance.id": serviceId, "environment": "heroku"})))
+trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-flask.otel", "service.instance.id": serviceId, "environment": "local"})))
 trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
-log_emitter_provider = LogEmitterProvider(resource=Resource.create({"service.name": "python-flask.heroku", "service.instance.id": serviceId, "environment": "heroku"}))
+log_emitter_provider = LogEmitterProvider(resource=Resource.create({"service.name": "python-flask.otel", "service.instance.id": serviceId, "environment": "local"}))
 set_log_emitter_provider(log_emitter_provider)
 
 exporter = OTLPLogExporter(insecure=True)
