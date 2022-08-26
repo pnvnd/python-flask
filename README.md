@@ -9,11 +9,11 @@
 
 | Step | Windows (PowerShell)                  | Linux / MacOS (bash)                   |
 |------|---------------------------------------|----------------------------------------|
-| 1    | `pip install virtualenv`                                                       |
+| 1    | `pip install virtualenv`              | `pip3 install virtualenv`              |
 | 2    | `python -m venv venv`                 | `python3 -m venv venv`                 |
 | 3    | `.\venv\Scripts\Activate.ps1`         | `source venv/bin/activate`             |
 | 4    | `python -m pip install --upgrade pip` | `python3 -m pip install --upgrade pip` |
-| 5    | `pip install -r requirements.txt`                                              |
+| 5    | `pip install -r requirements.txt`     | `pip install -r requirements.txt`      |
 
 
 # Running the Application
@@ -23,11 +23,11 @@ import newrelic.agent
 newrelic.agent.initialize()
 ```
 
-| Windows (PowerShell)                           | Linux / MacOS (bash)                           |
+| Windows (PowerShell)                           | Linux / macOS (bash)                           |
 |------------------------------------------------|------------------------------------------------|
 | `$Env:NEW_RELIC_APP_NAME = "Local Python App"` | `export NEW_RELIC_APP_NAME="Local Python App"` |
 | `$Env:NEW_RELIC_LICENSE_KEY = "XXXX...NRAL"`   | `export NEW_RELIC_LICENSE_KEY="XXXX...NRAL"`   |
-| `python datacrunch-consulting\webserver.py`    | `python3 datacrunch-consulting/webserver.py`   |
+| `python webserver.py`                          | `python3 webserver.py`                         |
 
 
 # Endpoints to Test
@@ -45,10 +45,19 @@ newrelic.agent.initialize()
 
 # OpenTelemetry
 1. To send telemetry data to New Relic, set the following environment variables
+
+Windows (PowerShell)
 ```
-OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp.nr-data.net:4317
-OTEL_EXPORTER_OTLP_HEADERS=api-key=XXXX...NRAL
-OTEL_RESOURCE_ATTRIBUTES=service.name=python-flask.otel,service.instance.id=localhost-pc
+$Env:OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp.nr-data.net:4317"
+$Env:OTEL_EXPORTER_OTLP_HEADERS=api-key="XXXX...NRAL"
+(optional) $Env:OTEL_RESOURCE_ATTRIBUTES=service.name="python-flask.otel,service.instance.id=localhost-pc"
+```
+
+Linux / macOS
+```
+export OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp.nr-data.net:4317"
+export OTEL_EXPORTER_OTLP_HEADERS=api-key="XXXX...NRAL"
+(optional) export OTEL_RESOURCE_ATTRIBUTES=service.name="python-flask.otel,service.instance.id=localhost-pc"
 ```
 
 2. Download the following packages to your virtual environment
@@ -62,7 +71,7 @@ pip install opentelemetry-distro
 
 3. No changes to the code is needed, just run the app as usual but with `opentelemetry-instrument` at the front
 ```
-opentelemetry-instrument python .\datacrunch-consulting\webserver.py
+opentelemetry-instrument python3 webserver.py
 ```
 
 # Docker Image
