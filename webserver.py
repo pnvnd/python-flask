@@ -1,12 +1,28 @@
-import newrelic.agent
-newrelic.agent.initialize()
+##########################
+# OpenTelemetry Settings #
+##########################
+from opentelemetry.sdk.resources import Resource
+import uuid
+serviceId = str(uuid.uuid1())
 
-# OpenTelemetry
+OTEL_RESOURCE_ATTRIBUTES = {
+    "service.name": "python-flask.otel",
+    "service.instance.id": serviceId,
+    "environment": "vercel"
+}
+
+##########
+# Traces #
+##########
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.trace.status import Status, StatusCode
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+
+trace.set_tracer_provider(TracerProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES)))
+trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
@@ -14,15 +30,32 @@ from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
 from opentelemetry.instrumentation.redis import RedisInstrumentor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
-from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
-from opentelemetry.sdk._logs import LogEmitterProvider
-from opentelemetry.sdk._logs import set_log_emitter_provider
-from opentelemetry.sdk._logs import LoggingHandler
-from opentelemetry.sdk._logs.export import BatchLogProcessor
-
-# Import the logging module and the New Relic log formatter
+########
+# Logs #
+########
 import logging
-# from newrelic.agent import NewRelicContextFormatter
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+from opentelemetry.exporter.otlp.proto.http._logs_exporter import OTLPLogExporter
+
+# Create a LoggerProvider with the same resource attributes
+logger_provider = LoggerProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES))
+
+# Configure OTLP Log Exporter
+log_exporter = OTLPLogExporter()
+
+# Add a batch processor for logs
+logger_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
+
+# Attach OpenTelemetry logging handler to Python's logging
+otel_handler = LoggingHandler(level=logging.INFO, logger_provider=logger_provider)
+logging.getLogger().addHandler(otel_handler)
+logging.getLogger().setLevel(logging.INFO)
+
+# from opentelemetry import _logs
+# from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+# from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+# from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
 
 # Instantiate a new log handler, and set logging level
 # handler = logging.StreamHandler()
@@ -41,35 +74,28 @@ import logging
 from flask import Flask, render_template, jsonify
 flaskapp = Flask(__name__, static_url_path='/', static_folder='application/static', template_folder='application/templates')
 
-# OpenTelemetry Settings
-import uuid
-serviceId = str(uuid.uuid1())
+# log_emitter_provider = LogEmitterProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES))
+# set_log_emitter_provider(log_emitter_provider)
 
-trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "python-flask.otel", "service.instance.id": serviceId, "environment": "local"})))
-trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+# exporter = OTLPLogExporter(insecure=True)
+# log_emitter_provider.add_log_processor(BatchLogProcessor(exporter))
+# log_emitter = log_emitter_provider.get_log_emitter(__name__, "0.1")
+# handler = LoggingHandler(level=logging.NOTSET, log_emitter=log_emitter)
 
-log_emitter_provider = LogEmitterProvider(resource=Resource.create({"service.name": "python-flask.otel", "service.instance.id": serviceId, "environment": "local"}))
-set_log_emitter_provider(log_emitter_provider)
+# # Attach OTLP handler to root logger
+# logging.getLogger().addHandler(handler)
 
-exporter = OTLPLogExporter(insecure=True)
-log_emitter_provider.add_log_processor(BatchLogProcessor(exporter))
-log_emitter = log_emitter_provider.get_log_emitter(__name__, "0.1")
-handler = LoggingHandler(level=logging.NOTSET, log_emitter=log_emitter)
+# # Log directly
+# logging.info("Jackdaws love my big sphinx of quartz.")
 
-# Attach OTLP handler to root logger
-logging.getLogger().addHandler(handler)
+# # Create different namespaced loggers
+# logger1 = logging.getLogger("myapp.area1")
+# logger2 = logging.getLogger("myapp.area2")
 
-# Log directly
-logging.info("Jackdaws love my big sphinx of quartz.")
-
-# Create different namespaced loggers
-logger1 = logging.getLogger("myapp.area1")
-logger2 = logging.getLogger("myapp.area2")
-
-logger1.debug("Quick zephyrs blow, vexing daft Jim.")
-logger1.info("How quickly daft jumping zebras vex.")
-logger2.warning("Jail zesty vixen who grabbed pay from quack.")
-logger2.error("The five boxing wizards jump quickly.")
+# logger1.debug("Quick zephyrs blow, vexing daft Jim.")
+# logger1.info("How quickly daft jumping zebras vex.")
+# logger2.warning("Jail zesty vixen who grabbed pay from quack.")
+# logger2.error("The five boxing wizards jump quickly.")
 
 FlaskInstrumentor().instrument_app(flaskapp)
 RequestsInstrumentor().instrument()
@@ -85,6 +111,7 @@ def index():
 
 @flaskapp.route("/ping", strict_slashes=False)
 def ping():
+    logging.info("Ping")
     return jsonify(ping="pong")
 
 @flaskapp.route("/about")
@@ -93,6 +120,7 @@ def about():
 
 @flaskapp.route("/statuspage", strict_slashes=False)
 def statuspage():
+    logging.info("Statuspage")
     return render_template("projects/statuspage.html", title="Simple Statuspage")
 
 # API to convert Fahrenheit to Celcius
