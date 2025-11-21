@@ -4,6 +4,8 @@
 from opentelemetry.sdk.resources import Resource
 import requests
 import uuid
+import os
+
 serviceId = str(uuid.uuid1())
 
 OTEL_RESOURCE_ATTRIBUTES = {
