@@ -37,7 +37,7 @@ import logging
 from opentelemetry._logs import set_logger_provider
 from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor, SimpleLogRecordProcessor
-from opentelemetry.exporter.otlp.proto.http._logs_exporter import OTLPLogExporter
+from opentelemetry.exporter.otlp.proto.http.logs_exporter import OTLPLogExporter
 
 # Create a LoggerProvider with the same resource attributes
 logger_provider = LoggerProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES))
