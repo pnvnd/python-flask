@@ -34,7 +34,8 @@ from opentelemetry.instrumentation.logging import LoggingInstrumentor
 # Logs #
 ########
 import logging
-from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler, set_logger_provider
+from opentelemetry._logs import set_logger_provider
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor, SimpleLogRecordProcessor
 from opentelemetry.exporter.otlp.proto.http._logs_exporter import OTLPLogExporter
 
