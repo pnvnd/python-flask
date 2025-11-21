@@ -2,6 +2,8 @@ from flask import Blueprint
 import logging
 
 logger = logging.getLogger(__name__)
+logger.propagate = True 
+
 luhn = Blueprint("luhn", __name__)
 
 @luhn.route("/api/luhn/<cardNo>", strict_slashes=False)
