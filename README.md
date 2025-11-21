@@ -16,20 +16,6 @@
 | 5    | `pip install -r requirements.txt`     | `pip install -r requirements.txt`      |
 
 
-# Running the Application
-To send data to New Relic APM, uncomment the the following lines in `webserver.py`:
-```python
-import newrelic.agent
-newrelic.agent.initialize()
-```
-
-| Windows (PowerShell)                           | Linux / macOS (bash)                           |
-|------------------------------------------------|------------------------------------------------|
-| `$Env:NEW_RELIC_APP_NAME = "Local Python App"` | `export NEW_RELIC_APP_NAME="Local Python App"` |
-| `$Env:NEW_RELIC_LICENSE_KEY = "XXXX...NRAL"`   | `export NEW_RELIC_LICENSE_KEY="XXXX...NRAL"`   |
-| `python webserver.py`                          | `python3 webserver.py`                         |
-
-
 # Endpoints to Test
 
 | API                             | Endpoint                                 | Notes                 |
@@ -56,8 +42,8 @@ $Env:OTEL_EXPORTER_OTLP_HEADERS=api-key="XXXX...NRAL"
 Linux / macOS
 ```
 export OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp.nr-data.net:4317"
-export OTEL_EXPORTER_OTLP_HEADERS=api-key="XXXX...NRAL"
-(optional) export OTEL_RESOURCE_ATTRIBUTES=service.name="python-flask.otel,service.instance.id=localhost-pc"
+export OTEL_EXPORTER_OTLP_HEADERS="api-key=XXXX...NRAL"
+(optional) export OTEL_RESOURCE_ATTRIBUTES=service.name="python-flask.otel,service.instance.id=vercel"
 ```
 
 2. Download the following packages to your virtual environment
@@ -65,7 +51,7 @@ export OTEL_EXPORTER_OTLP_HEADERS=api-key="XXXX...NRAL"
 pip install opentelemetry-api
 pip install opentelemetry-sdk
 pip install opentelemetry-instrumentation-flask
-pip install opentelemetry-exporter-otlp-proto-grpc
+pip install opentelemetry-exporter-otlp-proto-http
 pip install opentelemetry-distro
 ```
 
@@ -78,6 +64,6 @@ opentelemetry-instrument python3 webserver.py
 1. Build the Docker image with `docker build -t python-flask:latest .`
 2. Run the app with your `INGEST - LICENSE` key and give your application a name:
 ```
-docker run -d -e NEW_RELIC_LICENSE_KEY="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXNRAL" -e NEW_RELIC_APP_NAME="python-flask.docker" -p 5000:5000 python-flask:latest`
+docker run -d -e OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp.nr-data.net:4317" -e OTEL_EXPORTER_OTLP_HEADERS="api-key=XXXX...NRAL" -e OTEL_RESOURCE_ATTRIBUTES=service.name="python-flask.otel,service.instance.id=docker" -p 5000:5000 python-flask:latest`
 ```
 3. Access the application with the same endpoints above at `http://127.0.0.1:5000`
