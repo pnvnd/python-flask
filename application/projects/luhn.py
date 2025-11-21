@@ -1,15 +1,12 @@
 from flask import Blueprint
-
-# Import the logging module and the New Relic log formatter
 import logging
-from newrelic.agent import NewRelicContextFormatter
 
 # Instantiate a new log handler, and set logging level
 handler = logging.StreamHandler()
 handler.setLevel(logging.INFO)
 
 # Instantiate the log formatter and add it to the log handler
-formatter = NewRelicContextFormatter()
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 
 # Get the root logger, set logging level, and add the handler to it
