@@ -23,40 +23,30 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExport
 trace.set_tracer_provider(TracerProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES)))
 trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
-from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
-from opentelemetry.instrumentation.redis import RedisInstrumentor
-from opentelemetry.instrumentation.logging import LoggingInstrumentor
-
 ########
 # Logs #
 ########
 import logging
 from opentelemetry._logs import set_logger_provider
 from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
-from opentelemetry.sdk._logs.export import BatchLogRecordProcessor, SimpleLogRecordProcessor
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
 
-# Create a LoggerProvider with the same resource attributes
 logger_provider = LoggerProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES))
-
 set_logger_provider(logger_provider)
-
-# Configure OTLP Log Exporter
-log_exporter = OTLPLogExporter()
-
-# Add a batch processor for logs
-logger_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
-
-# Attach OpenTelemetry logging handler to Python's logging
-otel_handler = LoggingHandler(level=logging.INFO, logger_provider=logger_provider)
-logging.getLogger().addHandler(otel_handler)
+logger_provider.add_log_record_processor(BatchLogRecordProcessor(OTLPLogExporter()))
+logging.getLogger().addHandler(LoggingHandler(level=logging.INFO, logger_provider=logger_provider))
 logging.getLogger().setLevel(logging.INFO)
 
-# Example log
-logging.info("Hello from OpenTelemetry logs with resource attributes!")
+###################
+# Instrumentation #
+###################
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
+from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
+from opentelemetry.instrumentation.redis import RedisInstrumentor
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 # Flask Web Application
 from flask import Flask, render_template, jsonify
@@ -134,4 +124,3 @@ app.register_blueprint(divisibility)
 # Run Flask Web Application, new comment
 if __name__ == "__main__":
     app.run()
-     
