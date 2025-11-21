@@ -18,7 +18,7 @@ MarkupSafe
 numpy
 opentelemetry-api
 opentelemetry-distro
-opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-proto-grpc
 opentelemetry-instrumentation
 opentelemetry-instrumentation-flask
 opentelemetry-instrumentation-jinja2
@@ -47,4 +47,3 @@ urllib3
 Werkzeug
 wrapt
 zipp
-
