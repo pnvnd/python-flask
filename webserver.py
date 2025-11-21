@@ -34,12 +34,14 @@ from opentelemetry.instrumentation.logging import LoggingInstrumentor
 # Logs #
 ########
 import logging
-from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
-from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler, set_logger_provider
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor, SimpleLogRecordProcessor
 from opentelemetry.exporter.otlp.proto.http._logs_exporter import OTLPLogExporter
 
 # Create a LoggerProvider with the same resource attributes
 logger_provider = LoggerProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES))
+
+set_logger_provider(logger_provider)
 
 # Configure OTLP Log Exporter
 log_exporter = OTLPLogExporter()
@@ -52,50 +54,12 @@ otel_handler = LoggingHandler(level=logging.INFO, logger_provider=logger_provide
 logging.getLogger().addHandler(otel_handler)
 logging.getLogger().setLevel(logging.INFO)
 
-# from opentelemetry import _logs
-# from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
-# from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
-# from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
-
-# Instantiate a new log handler, and set logging level
-# handler = logging.StreamHandler()
-# handler.setLevel(logging.INFO)
-
-# Instantiate the log formatter and add it to the log handler
-#formatter = NewRelicContextFormatter()
-#handler.setFormatter(formatter)
-
-# Get the root logger, set logging level, and add the handler to it
-# root_logger = logging.getLogger()
-# root_logger.setLevel(logging.INFO)
-# root_logger.addHandler(handler)
+# Example log
+logging.info("Hello from OpenTelemetry logs with resource attributes!")
 
 # Flask Web Application
 from flask import Flask, render_template, jsonify
 flaskapp = Flask(__name__, static_url_path='/', static_folder='application/static', template_folder='application/templates')
-
-# log_emitter_provider = LogEmitterProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES))
-# set_log_emitter_provider(log_emitter_provider)
-
-# exporter = OTLPLogExporter(insecure=True)
-# log_emitter_provider.add_log_processor(BatchLogProcessor(exporter))
-# log_emitter = log_emitter_provider.get_log_emitter(__name__, "0.1")
-# handler = LoggingHandler(level=logging.NOTSET, log_emitter=log_emitter)
-
-# # Attach OTLP handler to root logger
-# logging.getLogger().addHandler(handler)
-
-# # Log directly
-# logging.info("Jackdaws love my big sphinx of quartz.")
-
-# # Create different namespaced loggers
-# logger1 = logging.getLogger("myapp.area1")
-# logger2 = logging.getLogger("myapp.area2")
-
-# logger1.debug("Quick zephyrs blow, vexing daft Jim.")
-# logger1.info("How quickly daft jumping zebras vex.")
-# logger2.warning("Jail zesty vixen who grabbed pay from quack.")
-# logger2.error("The five boxing wizards jump quickly.")
 
 FlaskInstrumentor().instrument_app(flaskapp)
 RequestsInstrumentor().instrument()
