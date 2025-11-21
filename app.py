@@ -2,6 +2,7 @@
 # OpenTelemetry Settings #
 ##########################
 from opentelemetry.sdk.resources import Resource
+import requests
 import uuid
 serviceId = str(uuid.uuid1())
 
@@ -94,6 +95,29 @@ def convertF(tempC):
         return f"{tempC}°C is {tempF:.2f}°F."
     except:
         logging.warning("[WARN] Invalid temperature!")
+
+@app.route("/extfib/<int:n>")
+def extfib(n):
+    try:
+        # Read endpoint from environment variable
+        endpoint = os.environ.get("LAMBDA_ENDPOINT")
+        if not endpoint:
+            logging.error("[ERROR] LAMBDA_ENDPOINT environment variable not set.")
+            return "Endpoint not configured", 500
+
+        # Call external Lambda endpoint with ?n=<n>
+        response = requests.get(f"{endpoint}", params={"n": n})
+        response.raise_for_status()
+
+        data = response.json()
+        result = data.get("result")
+
+        logging.info(f"[INFO] the {n}th Fibonacci number is {result}.")
+        return str(result)
+
+    except Exception as e:
+        logging.warning(f"[WARN] Failed to fetch Fibonacci number: {e}")
+        return "Error fetching result", 500
 
 ### Add Applications Here #######
 
