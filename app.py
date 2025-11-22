@@ -1,18 +1,5 @@
-##########################
-# OpenTelemetry Settings #
-##########################
-from opentelemetry.sdk.resources import Resource
-import requests
-import uuid
 import os
-
-serviceId = str(uuid.uuid1())
-
-OTEL_RESOURCE_ATTRIBUTES = {
-    "service.name": "python-flask.otel",
-    "service.instance.id": serviceId,
-    "environment": "vercel"
-}
+import requests
 
 ##########
 # Traces #
@@ -23,7 +10,7 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.trace.status import Status, StatusCode
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 
-trace.set_tracer_provider(TracerProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES)))
+trace.set_tracer_provider(TracerProvider())
 trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
 ########
@@ -35,7 +22,7 @@ from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
 
-logger_provider = LoggerProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES))
+logger_provider = LoggerProvider()
 set_logger_provider(logger_provider)
 logger_provider.add_log_record_processor(BatchLogRecordProcessor(OTLPLogExporter()))
 logging.getLogger().addHandler(LoggingHandler(level=logging.INFO, logger_provider=logger_provider))
@@ -49,29 +36,29 @@ from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
 
-metrics.set_meter_provider(MeterProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES), metric_readers=[PeriodicExportingMetricReader(OTLPMetricExporter())]))
+metrics.set_meter_provider(MeterProvider(metric_readers=[PeriodicExportingMetricReader(OTLPMetricExporter())]))
 hit_counter = metrics.get_meter(name="opentelemetry.instrumentation.custom", version="1.0.0").create_counter("hit.counter", unit="1", description="Measures the number of times an endpoint was hit.")
 
 ###################
 # Instrumentation #
 ###################
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
-from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
-from opentelemetry.instrumentation.redis import RedisInstrumentor
-from opentelemetry.instrumentation.logging import LoggingInstrumentor
+# from opentelemetry.instrumentation.requests import RequestsInstrumentor
+# from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
+# from opentelemetry.instrumentation.redis import RedisInstrumentor
+# from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 # Flask Web Application
 from flask import Flask, render_template, jsonify
 app = Flask(__name__, static_url_path='/', static_folder='application/static', template_folder='application/templates')
 
 FlaskInstrumentor().instrument_app(app)
-RequestsInstrumentor().instrument()
 Jinja2Instrumentor().instrument()
-URLLib3Instrumentor().instrument()
-RedisInstrumentor().instrument()
-LoggingInstrumentor().instrument()
+# RequestsInstrumentor().instrument()
+# URLLib3Instrumentor().instrument()
+# RedisInstrumentor().instrument()
+# LoggingInstrumentor().instrument()
 
 # Navigation
 @app.route("/")
