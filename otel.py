@@ -1,3 +1,5 @@
+from opentelemetry.sdk.resources import Resource
+
 ##########
 # Traces #
 ##########
@@ -7,7 +9,7 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.trace.status import Status, StatusCode
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 
-trace.set_tracer_provider(TracerProvider())
+trace.set_tracer_provider(TracerProvider(resource=Resource.get_default()))
 trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
 ###########
@@ -18,7 +20,7 @@ from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
 
-metrics.set_meter_provider(MeterProvider(metric_readers=[PeriodicExportingMetricReader(OTLPMetricExporter())]))
+metrics.set_meter_provider(MeterProvider(resource=Resource.get_default(), metric_readers=[PeriodicExportingMetricReader(OTLPMetricExporter())]))
 counter = metrics.get_meter(name="opentelemetry.instrumentation.custom", version="1.0.0").create_counter("counter", unit="{count}", description="Counts the number of times an endpoint was hit.")
 
 ########
@@ -30,7 +32,7 @@ from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
 
-logger_provider = LoggerProvider()
+logger_provider = LoggerProvider(resource=Resource.get_default())
 set_logger_provider(logger_provider)
 logger_provider.add_log_record_processor(BatchLogRecordProcessor(OTLPLogExporter()))
 logging.getLogger().addHandler(LoggingHandler(level=logging.INFO, logger_provider=logger_provider))
