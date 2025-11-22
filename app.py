@@ -1,43 +1,7 @@
 import os
-import requests
-
-##########
-# Traces #
-##########
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.trace.status import Status, StatusCode
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
-
-trace.set_tracer_provider(TracerProvider())
-trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
-
-########
-# Logs #
-########
+import otel
 import logging
-from opentelemetry._logs import set_logger_provider
-from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
-from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
-from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
-
-logger_provider = LoggerProvider()
-set_logger_provider(logger_provider)
-logger_provider.add_log_record_processor(BatchLogRecordProcessor(OTLPLogExporter()))
-logging.getLogger().addHandler(LoggingHandler(level=logging.INFO, logger_provider=logger_provider))
-logging.getLogger().setLevel(logging.INFO)
-
-###########
-# Metrics #
-###########
-from opentelemetry import metrics
-from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
-
-metrics.set_meter_provider(MeterProvider(metric_readers=[PeriodicExportingMetricReader(OTLPMetricExporter())]))
-hit_counter = metrics.get_meter(name="opentelemetry.instrumentation.custom", version="1.0.0").create_counter("hit.counter", unit="1", description="Measures the number of times an endpoint was hit.")
+import requests
 
 ###################
 # Instrumentation #
@@ -46,8 +10,6 @@ from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 # from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
-# from opentelemetry.instrumentation.redis import RedisInstrumentor
-# from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 # Flask Web Application
 from flask import Flask, render_template, jsonify
@@ -57,30 +19,28 @@ FlaskInstrumentor().instrument_app(app)
 Jinja2Instrumentor().instrument()
 RequestsInstrumentor().instrument()
 # URLLib3Instrumentor().instrument()
-# RedisInstrumentor().instrument()
-# LoggingInstrumentor().instrument()
 
 # Navigation
 @app.route("/")
 def index():
-    hit_counter.add(1, attributes={"route": "/"})
+    otel.counter.add(1, attributes={"route": "/"})
     return render_template("index.html", title="Flask Web Application")
 
 @app.route("/ping", strict_slashes=False)
 def ping():
     logging.info("Ping")
-    hit_counter.add(1, attributes={"route": "/ping"})
+    otel.counter.add(1, attributes={"route": "/ping"})
     return jsonify(ping="pong")
 
 @app.route("/about")
 def about():
-    hit_counter.add(1, attributes={"route": "/about"})
+    otel.counter.add(1, attributes={"route": "/about"})
     return render_template("about.html", title="Datacrunch - About")
 
 @app.route("/statuspage", strict_slashes=False)
 def statuspage():
     logging.info("Statuspage")
-    hit_counter.add(1, attributes={"route": "/statuspage"})
+    otel.counter.add(1, attributes={"route": "/statuspage"})
     return render_template("projects/statuspage.html", title="Simple Statuspage")
 
 # API to convert Fahrenheit to Celcius, without error handling
@@ -88,7 +48,7 @@ def statuspage():
 def convertC(tempF):
     tempC = (5/9*(float(tempF))-32)
     logging.info(f"[INFO] Converted {tempF}°F to {tempC:.2f}°C.")
-    hit_counter.add(1, attributes={"route": "/convertC"})
+    otel.counter.add(1, attributes={"route": "/convertC"})
     return f"{tempF}°F is {tempC:.2f}°C."
 
 # API to convert Celcius to Fahrenheit, with error handling
@@ -97,11 +57,11 @@ def convertF(tempC):
     try:
         tempF = 9/5*(float(tempC))+32
         logging.info(f"[INFO] Converted {tempC}°F to {tempF:.2f}°C.")
-        hit_counter.add(1, attributes={"route": "/convertF"})
+        otel.counter.add(1, attributes={"route": "/convertF"})
         return f"{tempC}°C is {tempF:.2f}°F."
     except:
         logging.warning("[WARN] Invalid temperature!")
-        hit_counter.add(1, attributes={"route": "/convertF"})
+        otel.counter.add(1, attributes={"route": "/convertF"})
 
 @app.route("/extfib/<int:n>")
 def extfib(n):
@@ -120,12 +80,12 @@ def extfib(n):
         result = data.get("result")
 
         logging.info(f"[INFO] the {n}th Fibonacci number is {result}.")
-        hit_counter.add(1, attributes={"route": "/extfib"})
+        otel.counter.add(1, attributes={"route": "/extfib"})
         return str(result)
 
     except Exception as e:
         logging.warning(f"[WARN] Failed to fetch Fibonacci number: {e}")
-        hit_counter.add(1, attributes={"route": "/extfib"})
+        otel.counter.add(1, attributes={"route": "/extfib"})
         return "Error fetching result", 500
 
 ### Add Applications Here #######
