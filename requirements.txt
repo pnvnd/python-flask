@@ -11,7 +11,7 @@ importlib_metadata
 itsdangerous
 Jinja2
 MarkupSafe
-numpy5
+numpy
 opentelemetry-api
 opentelemetry-exporter-otlp
 opentelemetry-exporter-otlp-proto-common
@@ -39,3 +39,4 @@ urllib3
 Werkzeug
 wrapt
 zipp
+
