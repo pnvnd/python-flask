@@ -44,7 +44,7 @@ hit_counter = metrics.get_meter(name="opentelemetry.instrumentation.custom", ver
 ###################
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
-# from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
 # from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
 # from opentelemetry.instrumentation.redis import RedisInstrumentor
 # from opentelemetry.instrumentation.logging import LoggingInstrumentor
@@ -55,7 +55,7 @@ app = Flask(__name__, static_url_path='/', static_folder='application/static', t
 
 FlaskInstrumentor().instrument_app(app)
 Jinja2Instrumentor().instrument()
-# RequestsInstrumentor().instrument()
+RequestsInstrumentor().instrument()
 # URLLib3Instrumentor().instrument()
 # RedisInstrumentor().instrument()
 # LoggingInstrumentor().instrument()
