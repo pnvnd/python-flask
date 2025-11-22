@@ -9,18 +9,15 @@ import requests
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
-# from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
-
-# Flask Web Application
 from flask import Flask, render_template, jsonify
 app = Flask(__name__, static_url_path='/', static_folder='application/static', template_folder='application/templates')
-
 FlaskInstrumentor().instrument_app(app)
 Jinja2Instrumentor().instrument()
 RequestsInstrumentor().instrument()
-# URLLib3Instrumentor().instrument()
 
-# Navigation
+###############
+# Application #
+###############
 @app.route("/")
 def index():
     otel.counter.add(1, attributes={"route": "/"})
@@ -34,6 +31,7 @@ def ping():
 
 @app.route("/about")
 def about():
+    logging.info("About")
     otel.counter.add(1, attributes={"route": "/about"})
     return render_template("about.html", title="Datacrunch - About")
 
@@ -88,7 +86,9 @@ def extfib(n):
         otel.counter.add(1, attributes={"route": "/extfib"})
         return "Error fetching result", 500
 
-### Add Applications Here #######
+##############
+# Blueprints #
+##############
 
 # API to calculate the nth prime number and how long it takes
 from application.projects.prime import prime
