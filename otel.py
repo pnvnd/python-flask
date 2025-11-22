@@ -7,7 +7,7 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.trace.status import Status, StatusCode
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 
-trace.set_tracer_provider(TracerProvider()
+trace.set_tracer_provider(TracerProvider())
 trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
 ###########
