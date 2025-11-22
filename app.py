@@ -41,6 +41,17 @@ logger_provider.add_log_record_processor(BatchLogRecordProcessor(OTLPLogExporter
 logging.getLogger().addHandler(LoggingHandler(level=logging.INFO, logger_provider=logger_provider))
 logging.getLogger().setLevel(logging.INFO)
 
+###########
+# Metrics #
+###########
+from opentelemetry import metrics
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
+
+metrics.set_meter_provider(MeterProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES), metric_readers=[PeriodicExportingMetricReader(OTLPMetricExporter())]))
+hit_counter = metrics.get_meter("opentelemetry.instrumentation.custom").create_counter("hit.counter", unit="1", description="Measures the number of times an endpoint was hit.")
+
 ###################
 # Instrumentation #
 ###################
@@ -65,38 +76,45 @@ LoggingInstrumentor().instrument()
 # Navigation
 @app.route("/")
 def index():
+    hit_counter.add(1, attributes={"route": "/"})
     return render_template("index.html", title="Flask Web Application")
 
 @app.route("/ping", strict_slashes=False)
 def ping():
     logging.info("Ping")
+    hit_counter.add(1, attributes={"route": "/ping"})
     return jsonify(ping="pong")
 
 @app.route("/about")
 def about():
+    hit_counter.add(1, attributes={"route": "/about"})
     return render_template("about.html", title="Datacrunch - About")
 
 @app.route("/statuspage", strict_slashes=False)
 def statuspage():
     logging.info("Statuspage")
+    hit_counter.add(1, attributes={"route": "/statuspage"})
     return render_template("projects/statuspage.html", title="Simple Statuspage")
 
-# API to convert Fahrenheit to Celcius
+# API to convert Fahrenheit to Celcius, without error handling
 @app.route("/convertC/<tempF>")
 def convertC(tempF):
     tempC = (5/9*(float(tempF))-32)
     logging.info(f"[INFO] Converted {tempF}°F to {tempC:.2f}°C.")
+    hit_counter.add(1, attributes={"route": "/convertC"})
     return f"{tempF}°F is {tempC:.2f}°C."
 
-# API to convert Celcius to Fahrenheit New Comment
+# API to convert Celcius to Fahrenheit, with error handling
 @app.route("/convertF/<tempC>")
 def convertF(tempC):
     try:
         tempF = 9/5*(float(tempC))+32
         logging.info(f"[INFO] Converted {tempC}°F to {tempF:.2f}°C.")
+        hit_counter.add(1, attributes={"route": "/convertF"})
         return f"{tempC}°C is {tempF:.2f}°F."
     except:
         logging.warning("[WARN] Invalid temperature!")
+        hit_counter.add(1, attributes={"route": "/convertF"})
 
 @app.route("/extfib/<int:n>")
 def extfib(n):
@@ -115,10 +133,12 @@ def extfib(n):
         result = data.get("result")
 
         logging.info(f"[INFO] the {n}th Fibonacci number is {result}.")
+        hit_counter.add(1, attributes={"route": "/extfib"})
         return str(result)
 
     except Exception as e:
         logging.warning(f"[WARN] Failed to fetch Fibonacci number: {e}")
+        hit_counter.add(1, attributes={"route": "/extfib"})
         return "Error fetching result", 500
 
 ### Add Applications Here #######
