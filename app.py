@@ -50,7 +50,7 @@ from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
 
 metrics.set_meter_provider(MeterProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES), metric_readers=[PeriodicExportingMetricReader(OTLPMetricExporter())]))
-hit_counter = metrics.get_meter("opentelemetry.instrumentation.custom").create_counter("hit.counter", unit="1", description="Measures the number of times an endpoint was hit.")
+hit_counter = metrics.get_meter(name="opentelemetry.instrumentation.custom", version="1.0.0").create_counter("hit.counter", unit="1", description="Measures the number of times an endpoint was hit.")
 
 ###################
 # Instrumentation #
