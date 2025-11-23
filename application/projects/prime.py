@@ -1,7 +1,11 @@
 from flask import Blueprint
+import logging
+
+logger = logging.getLogger(__name__)
+logger.propagate = True
 
 # Flask Blueprint Application
-prime = Blueprint("prime", "prime")
+prime = Blueprint("prime", __name__)
 
 @prime.route("/api/prime/<int:n>", strict_slashes=False)
 
@@ -28,5 +32,7 @@ def getPrime(n):
         a += 1
 
     end = time.time()
+
+    logger.info(f"{a-1} is prime number #{n}. Calculated in {end-start} seconds.")
 
     return f"{a-1} is prime number #{n}. Calculated in {end-start} seconds."

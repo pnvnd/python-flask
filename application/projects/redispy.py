@@ -1,7 +1,11 @@
 from flask import Blueprint, render_template
+import logging
+
+logger = logging.getLogger(__name__)
+logger.propagate = True
 
 # Flask Blueprint Application
-redispy = Blueprint("redispy", "redispy")
+redispy = Blueprint("redispy", __name__)
 
 @redispy.route("/redis", strict_slashes=False)
 def index():

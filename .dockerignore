@@ -1,4 +1,12 @@
-*
-!requirements.txt
-!webserver.py 
-!application 
+.git
+.gitignore
+.dockerignore
+Dockerfile
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv
+*.db
+.DS_Store
+README.md

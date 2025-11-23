@@ -1,7 +1,11 @@
 from flask import Blueprint, render_template, request
+import logging
+
+logger = logging.getLogger(__name__)
+logger.propagate = True
 
 # Flask Blueprint Application
-divisibility = Blueprint("divisibility", "divisibility")
+divisibility = Blueprint("divisibility", __name__)
 
 @divisibility.route("/divisibility", strict_slashes=False)
 def index():
@@ -21,5 +25,5 @@ def divisibility_result():
             factors.append(n)
         else:
             continue
-
+    logger.info(f"{input1} is divisible by {factors}.")
     return render_template("projects/divisibility.html", title="Divisibility Results", input1=input1, factors=factors)
