@@ -37,15 +37,15 @@
 
    ### Windows (PowerShell)
    ```PowerShell
-   $Env:OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp.nr-data.net:4317"
-   $Env:OTEL_EXPORTER_OTLP_HEADERS=api-key="XXXX...NRAL"
+   $Env:OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4317"
+   $Env:OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer <token>"
    $Env:OTEL_RESOURCE_ATTRIBUTES=service.name="python-flask.otel,service.instance.id=localhost-pc"
    ```
 
    ### Linux / macOS
    ```Bash
-   export OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp.nr-data.net:4317"
-   export OTEL_EXPORTER_OTLP_HEADERS="api-key=XXXX...NRAL"
+   export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4317"
+   export OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer <token>"
    export OTEL_RESOURCE_ATTRIBUTES=service.name="python-flask.otel,service.instance.id=vercel"
    ```
 
@@ -66,6 +66,14 @@
 1. Build the Docker image with `docker build -t python-flask:latest .`
 2. Run the app with your environment variables and give your application a name:
    ```
-   docker run -d --name python-flask -e OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp.nr-data.net:4318" -e OTEL_EXPORTER_OTLP_HEADERS="api-key=XXXX...NRAL" -e OTEL_RESOURCE_ATTRIBUTES="service.name=python-flask.otel,service.instance.id=docker,tags.environment=production,tags.team=datacrunch" -p 5000:5000 python-flask:latest
+   docker run -dp 5000:5000 --name python-flask `
+   -e OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4317" `
+   -e OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer <token>" `
+   -e OTEL_RESOURCE_ATTRIBUTES="service.name=python-flask.otel,service.instance.id=docker,tags.environment=production,tags.team=datacrunch" `
+   python-flask:latest
+   ```
+   or
+   ```
+   docker run -dp 5000:5000 --env-file .env --name python-flask ghcr.io/pnvnd/python-flask:latest`
    ```
 3. Access the application with the same endpoints above at `http://127.0.0.1:5000`

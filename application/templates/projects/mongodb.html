@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+  <h1>MongoDB Atlas Sample Weather Data</h1>
+
+  {% if error %}
+    <div class="error">Unable to load MongoDB documents: {{ error }}</div>
+  {% endif %}
+
+  {% if rows %}
+    <p>Total documents: {{ total_count }}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Station</th>
+          <th>Timestamp</th>
+          <th>Elevation</th>
+          <th>Call Letters</th>
+          <th>Air Temp</th>
+          <th>Dew Point</th>
+          <th>Pressure</th>
+          <th>Wind Speed</th>
+          <th>Visibility</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.st }}</td>
+            <td>{{ row.ts }}</td>
+            <td>{{ row.elevation }}</td>
+            <td>{{ row.callLetters }}</td>
+            <td>{{ row.airTemperature }}</td>
+            <td>{{ row.dewPoint }}</td>
+            <td>{{ row.pressure }}</td>
+            <td>{{ row.windSpeed }}</td>
+            <td>{{ row.visibility }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No documents were found in the <strong>sample_weatherdata.data</strong> collection.</p>
+  {% endif %}
+{% endblock %}

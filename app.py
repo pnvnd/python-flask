@@ -9,6 +9,7 @@ import requests
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.jinja2 import Jinja2Instrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.pymongo import PymongoInstrumentor
 # from opentelemetry.instrumentation.wsgi import OpenTelemetryMiddleware
 from flask import Flask, render_template, jsonify
 app = Flask(__name__, static_url_path='/', static_folder='application/static', template_folder='application/templates')
@@ -16,6 +17,7 @@ app = Flask(__name__, static_url_path='/', static_folder='application/static', t
 FlaskInstrumentor().instrument_app(app)
 Jinja2Instrumentor().instrument()
 RequestsInstrumentor().instrument()
+PymongoInstrumentor().instrument()
 
 ###############
 # Application #
@@ -59,9 +61,14 @@ def convertF(tempC):
         logging.info(f"[INFO] Converted {tempC}°F to {tempF:.2f}°C.")
         otel.counter.add(1, attributes={"route": "/convertF"})
         return f"{tempC}°C is {tempF:.2f}°F."
-    except:
+    except ValueError:
         logging.warning("[WARN] Invalid temperature!")
         otel.counter.add(1, attributes={"route": "/convertF"})
+        return "Invalid temperature value", 400
+    except Exception as e:
+        logging.exception("[ERROR] Unexpected error in convertF")
+        otel.counter.add(1, attributes={"route": "/convertF"})
+        return f"Error: {e}", 500
 
 @app.route("/extfib/<int:n>")
 def extfib(n):
@@ -108,9 +115,9 @@ app.register_blueprint(luhn)
 from application.projects.covid import covid
 app.register_blueprint(covid)
 
-# Test redis-py in App
-from application.projects.redispy import redispy
-app.register_blueprint(redispy)
+# MongoDB Atlas sample weather data route
+from application.projects.mongodb import mongodb as mongodb_blueprint
+app.register_blueprint(mongodb_blueprint)
 
 # Input number to check divisibility
 from application.projects.divisibility import divisibility

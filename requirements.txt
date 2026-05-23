@@ -3,6 +3,7 @@ certifi
 charset-normalizer
 click
 colorama
+dnspython
 Flask
 googleapis-common-protos
 grpcio
@@ -20,6 +21,7 @@ opentelemetry-exporter-otlp-proto-http
 opentelemetry-instrumentation
 opentelemetry-instrumentation-flask
 opentelemetry-instrumentation-jinja2
+opentelemetry-instrumentation-pymongo
 opentelemetry-instrumentation-requests
 opentelemetry-instrumentation-wsgi
 opentelemetry-proto
@@ -29,7 +31,9 @@ opentelemetry-util-http
 packaging
 pandas
 protobuf
+pymongo
 python-dateutil
+python-dotenv
 pytz
 requests
 six
@@ -39,4 +43,3 @@ urllib3
 Werkzeug
 wrapt
 zipp
-
