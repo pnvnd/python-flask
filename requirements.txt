@@ -23,6 +23,7 @@ opentelemetry-instrumentation-flask
 opentelemetry-instrumentation-jinja2
 opentelemetry-instrumentation-pymongo
 opentelemetry-instrumentation-requests
+opentelemetry-instrumentation-system-metrics
 opentelemetry-instrumentation-wsgi
 opentelemetry-proto
 opentelemetry-sdk
@@ -31,6 +32,7 @@ opentelemetry-util-http
 packaging
 pandas
 protobuf
+psutil
 pymongo
 python-dateutil
 python-dotenv
